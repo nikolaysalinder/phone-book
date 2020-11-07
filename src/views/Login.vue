@@ -1,41 +1,94 @@
 <template>
-  <div class="container">
-    <h1>login</h1>
-    <form class="form" @submit.prevent="login">
-      <label for="">Ваш логин</label>
-      <input v-model="email" type="text" />
-      <label for="">Ваш пароль</label>
-      <input v-model="password" type="password" />
-      <button>отправить</button>
-    </form>
-  </div>
+  <el-container>
+    <el-form
+      :model="dynamicValidateForm"
+      ref="dynamicValidateForm"
+      label-width="120px"
+      class="demo-dynamic"
+    >
+      <el-form-item
+        prop="email"
+        label="Email"
+        :rules="[
+          {
+            required: true,
+            message: 'Please input email address',
+            trigger: 'blur',
+          },
+          {
+            type: 'email',
+            message: 'Please input correct email address',
+            trigger: ['blur', 'change'],
+          },
+        ]"
+      >
+        <el-input v-model="dynamicValidateForm.email"></el-input>
+      </el-form-item>
+      <el-form-item
+        v-for="(domain, index) in dynamicValidateForm.domains"
+        :label="'Domain' + index"
+        :key="domain.key"
+        :prop="'domains.' + index + '.value'"
+        :rules="{
+          required: true,
+          message: 'domain can not be null',
+          trigger: 'blur',
+        }"
+      >
+        <el-input v-model="domain.value"></el-input
+        ><el-button @click.prevent="removeDomain(domain)">Delete</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm('dynamicValidateForm')"
+          >Submit</el-button
+        >
+        <el-button @click="addDomain">New domain</el-button>
+        <el-button @click="resetForm('dynamicValidateForm')">Reset</el-button>
+      </el-form-item>
+    </el-form>
+  </el-container>
 </template>
-
 <script>
-import store from "@/store";
 export default {
   data() {
     return {
-      email: null,
-      password: null,
+      dynamicValidateForm: {
+        domains: [
+          {
+            key: 1,
+            value: "",
+          },
+        ],
+        email: "",
+      },
     };
   },
   methods: {
-    login() {
-      store.user = this.email;
-      this.$router.push("/contacts");
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    removeDomain(item) {
+      var index = this.dynamicValidateForm.domains.indexOf(item);
+      if (index !== -1) {
+        this.dynamicValidateForm.domains.splice(index, 1);
+      }
+    },
+    addDomain() {
+      this.dynamicValidateForm.domains.push({
+        key: Date.now(),
+        value: "",
+      });
     },
   },
 };
 </script>
-
-<style>
-.form {
-  width: 360px;
-  padding: 20px;
-  box-sizing: border-box;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-}
-</style>

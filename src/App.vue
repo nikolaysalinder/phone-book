@@ -12,6 +12,9 @@
             <router-link to="/">Login</router-link>
           </el-menu-item>
           <el-menu-item index="2">
+            <router-link to="/registration">Registration</router-link>
+          </el-menu-item>
+          <el-menu-item index="3">
             <router-link to="/contacts">Contacts</router-link>
           </el-menu-item>
         </el-menu>
@@ -26,9 +29,15 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      activeIndex: "1",
+    };
   },
-  methods: {},
+  methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
+  },
 };
 </script>
 
