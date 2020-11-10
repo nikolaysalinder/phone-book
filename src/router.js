@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Login from "./views/Login.vue";
 import Contacts from "./views/Contacts.vue";
+import NewUser from "./views/NewUser.vue";
 import Registration from "./views/Registration.vue";
 import store from "@/store";
 
@@ -23,8 +24,24 @@ const router = new Router({
       path: "/contacts",
       name: "contacts",
       component: Contacts,
-      meta: {
-        requiresAuth: true,
+      beforeEnter(to, from, next) {
+        if (store.state.idToken) {
+          next();
+        } else {
+          next("/");
+        }
+      },
+    },
+    {
+      path: "/newuser",
+      name: "newuser",
+      component: NewUser,
+      beforeEnter(to, from, next) {
+        if (store.state.idToken) {
+          next();
+        } else {
+          next("/");
+        }
       },
     },
   ],
@@ -32,7 +49,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
-    if (!store.user) {
+    if (store.user) {
       next({
         name: "login",
       });

@@ -1,6 +1,5 @@
 <template>
   <el-container>
-    <h1>registraton</h1>
     <el-form
       :model="ruleForm"
       status-icon
@@ -53,7 +52,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -93,17 +91,11 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios
-            .post(
-              "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAyQ2rarIGADucWtmuFX5kGKx10ZhtSiFo",
-              {
-                email: this.ruleForm.email,
-                password: this.ruleForm.pass,
-                returnSecureToken: true,
-              }
-            )
-            .then((response) => console.log(response))
-            .catch((error) => console.log(error));
+          console.log(this.ruleForm.email, this.ruleForm.pass);
+          this.$store.dispatch("signup", {
+            email: this.ruleForm.email,
+            password: this.ruleForm.pass,
+          });
         } else {
           console.log("error submit!!");
           return false;

@@ -1,10 +1,12 @@
 <template>
   <el-container>
     <el-form
-      :model="dynamicValidateForm"
-      ref="dynamicValidateForm"
-      label-width="120px"
-      class="demo-dynamic"
+      :model="ruleForm"
+      status-icon
+      :rules="rules"
+      ref="ruleForm"
+      label-width="150px"
+      class="demo-ruleForm"
     >
       <el-form-item
         prop="email"
@@ -12,39 +14,80 @@
         :rules="[
           {
             required: true,
-            message: 'Please input email address',
+            message: 'Пожалуйста введите email',
             trigger: 'blur',
           },
           {
             type: 'email',
-            message: 'Please input correct email address',
+            message: 'Пожалуйста введите верный email',
             trigger: ['blur', 'change'],
           },
         ]"
       >
-        <el-input v-model="dynamicValidateForm.email"></el-input>
+        <el-input v-model="ruleForm.email"></el-input>
+      </el-form-item>
+
+      <el-form-item
+        label="Пароль"
+        prop="pass"
+        :rules="[
+          {
+            required: true,
+            message: 'Пожалуйста введите пароль',
+            trigger: 'blur',
+          },
+        ]"
+      >
+        <el-input
+          type="password"
+          v-model="ruleForm.pass"
+          autocomplete="off"
+        ></el-input>
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm('dynamicValidateForm')"
+        <el-button type="primary" @click="submitForm('ruleForm')"
           >Submit</el-button
         >
+        <el-button @click="resetForm('ruleForm')">Reset</el-button>
       </el-form-item>
     </el-form>
   </el-container>
 </template>
+
 <script>
 export default {
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("Пожалуйста, введите пароль"));
+      } else if (value.length < 6) {
+        callback(new Error("Минимум 6 символов"));
+      } else {
+        if (this.ruleForm.checkPass !== "") {
+          this.$refs.ruleForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("Повторите пароль"));
+      } else if (value !== this.ruleForm.pass) {
+        callback(new Error("Пароли не совпадают!"));
+      } else {
+        callback();
+      }
+    };
     return {
-      dynamicValidateForm: {
-        domains: [
-          {
-            key: 1,
-            value: "",
-          },
-        ],
+      ruleForm: {
         email: "",
+        pass: "",
+        checkPass: "",
+      },
+      rules: {
+        pass: [{ validator: validatePass, trigger: "blur" }],
+        checkPass: [{ validator: validatePass2, trigger: "blur" }],
       },
     };
   },
@@ -52,7 +95,11 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          console.log(this.ruleForm.email, this.ruleForm.pass);
+          this.$store.dispatch("login", {
+            email: this.ruleForm.email,
+            password: this.ruleForm.pass,
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -62,20 +109,8 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    removeDomain(item) {
-      var index = this.dynamicValidateForm.domains.indexOf(item);
-      if (index !== -1) {
-        this.dynamicValidateForm.domains.splice(index, 1);
-      }
-    },
-    addDomain() {
-      this.dynamicValidateForm.domains.push({
-        key: Date.now(),
-        value: "",
-      });
-    },
   },
 };
 </script>
 
-<style></style>
+<style type="text/css"></style>
