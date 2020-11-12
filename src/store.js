@@ -23,9 +23,23 @@ export default new Vuex.Store({
       state.idToken = null;
       state.userId = null;
     },
+    deleteUser(state, user) {
+      const index = state.users.findIndex((usr) => usr.id === user.id);
+      state.users.splice(index, 1);
+      axios
+        .delete(
+          "https://phone-book-ca240.firebaseio.com/users/" +
+            user.id +
+            ".json" +
+            "?auth=" +
+            state.idToken
+        )
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    },
   },
   actions: {
-    signup({ commit, dispatch }, authData) {
+    signup({ commit }, authData) {
       axios
         .post(
           "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAyQ2rarIGADucWtmuFX5kGKx10ZhtSiFo",
@@ -44,7 +58,7 @@ export default new Vuex.Store({
             idToken: response.data.idToken,
             userId: response.data.localId,
           });
-          dispatch("storeUser", authData);
+          // dispatch("storeUser", authData);
           router.push("/");
         })
         .catch((error) => console.log(error));
@@ -117,7 +131,7 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    users(state) {
+    users: (state) => {
       return state.users;
     },
     isAuthenticated(state) {

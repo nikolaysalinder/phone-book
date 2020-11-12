@@ -1,36 +1,51 @@
 <template>
   <div class="container">
     <div class="users">
-      <table style="width: 100%" class="table">
-        <tr>
-          <th class="table__head">ID</th>
-          <th class="table__head">Аватар</th>
-          <th class="table__head">Фамилия</th>
-          <th class="table__head">Имя</th>
-          <th class="table__head">E-mail</th>
-          <th class="table__head">Телефон</th>
-        </tr>
-        <tr class="table__row" v-for="user in users" :key="user.id">
-          <td class="table__cell">{{ user.id }}</td>
-          <td class="table__cell">
-            <img
-              :src="user.avatar"
-              alt="avatar"
-              class="users__image"
-              height="50px"
-              width="50px"
-            />
-          </td>
-          <td class="table__cell">{{ user.lastName }}</td>
-          <td class="table__cell">{{ user.firstName }}</td>
-          <td class="table__cell">{{ user.email }}</td>
-          <td class="table__cell">{{ user.phone }}</td>
-          <td class="table__cell">
-            <el-button type="primary" icon="el-icon-edit" circle></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle></el-button>
-          </td>
-        </tr>
-      </table>
+      <ul class="table">
+        <li class="table__row">
+          <div class="table__head">ID</div>
+          <div class="table__head">Аватар</div>
+          <div class="table__head">Фамилия</div>
+          <div class="table__head">Имя</div>
+          <div class="table__head">E-mail</div>
+          <div class="table__head">Телефон</div>
+        </li>
+        <li class="table__row">
+          <el-button class="table__add-user" type="primary"
+            >Добавить контакт</el-button
+          >
+        </li>
+        <transition-group name="user-list">
+          <li class="table__row" v-for="user in users" :key="user.id">
+            <div class="table__cell">{{ user.id }}</div>
+            <div class="table__cell">
+              <img
+                :src="
+                  user.avatar
+                    ? user.avatar
+                    : 'https://www.flaticon.com/svg/static/icons/svg/1077/1077114.svg'
+                "
+                class="users__image"
+                height="40px"
+                width="40px"
+              />
+            </div>
+            <div class="table__cell">{{ user.lastName }}</div>
+            <div class="table__cell">{{ user.firstName }}</div>
+            <div class="table__cell">{{ user.email }}</div>
+            <div class="table__cell">{{ user.phone }}</div>
+            <div class="table__cell">
+              <el-button type="primary" icon="el-icon-edit" circle></el-button>
+              <el-button
+                @click="removeUser(user)"
+                type="danger"
+                icon="el-icon-delete"
+                circle
+              ></el-button>
+            </div>
+          </li>
+        </transition-group>
+      </ul>
       <!--  <div>
         <div class="users__lastname">{{ user.lastName }}</div>
         <div class="users__firstname">{{ user.firstName }}</div>
@@ -48,7 +63,20 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      newUser: {
+        imgUrl: "",
+        lastName: "",
+        firstName: "",
+        email: "",
+        phone: "",
+      },
+    };
+  },
+  methods: {
+    removeUser(user) {
+      this.$store.commit("deleteUser", user);
+    },
   },
   computed: {
     users() {
@@ -64,46 +92,136 @@ export default {
 <style lang="scss">
 .table {
   width: 100%;
-  &__id {
-    visibility: hidden;
-  }
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
   &__head {
-    text-align: left;
+    padding: 10px 20px;
+    font-weight: bold;
+    box-sizing: border-box;
+    &:first-child {
+      width: 190px;
+      text-align: center;
+    }
     &:nth-child(2) {
       text-align: center;
+      width: 70px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    &:nth-child(3) {
+      text-align: center;
+      width: 140px;
+    }
+    &:nth-child(4) {
+      text-align: left;
+      width: 140px;
+    }
+    &:nth-child(4) {
+      text-align: left;
+      width: 140px;
+    }
+    &:nth-child(5) {
+      text-align: left;
+      width: 200px;
     }
   }
   &__row {
+    display: flex;
+    width: 100%;
+    &:nth-child(2n) {
+      background: #f1f1f1;
+    }
+    &--new-user {
+      padding-left: 120px;
+    }
+  }
+  &__add-user {
+    display: block;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    width: 100%;
   }
   &__cell {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
+
+    box-sizing: border-box;
+    height: 60px;
+    line-height: 40px;
     &:first-child {
-      width: 50px;
+      width: 200px;
       font-size: 14px;
       color: #797979;
     }
     &:nth-child(2) {
       text-align: center;
     }
-    &:last-child {
-      width: 90px;
+    &:nth-child(3) {
+      text-align: left;
+      width: 140px;
+      padding-left: 30px;
+    }
+    &:nth-child(4) {
+      text-align: left;
+      width: 140px;
+      padding-left: 20px;
+    }
+    &:nth-child(5) {
+      text-align: left;
+      min-width: 200px;
+      padding-left: 10px;
+    }
+    &:nth-child(6) {
+      text-align: left;
+      min-width: 130px;
+      padding-left: 10px;
+    }
+    &:nth-child(7) {
+      display: flex;
+      text-align: left;
+      min-width: 110px;
+      padding-left: 10px;
     }
   }
 }
-.users {
-  &__item {
-    border-bottom: 2px solid #ccc;
-    display: flex;
-    justify-content: space-around;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    align-items: center;
+.new-user {
+  &__input {
+    padding-top: 4px;
   }
+}
+.users {
+  width: 1000px;
+  margin: 0 auto;
   &__image {
-    height: 50px;
-    width: 50px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
   }
+}
+.user-list-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.user-list-enter-active {
+  transition: all 1s ease-out;
+}
+.user-list-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+.user-list-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+.user-list-leave-active {
+  transition: all 0.5s ease-in;
+  position: absolute;
+}
+.user-list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.user-list-move {
+  transition: transform 0.8s ease;
 }
 </style>

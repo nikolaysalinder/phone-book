@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
-const data = JSON.parse(fs.readFileSync("db-1605086283177.json", "utf8"));
+const data = JSON.parse(fs.readFileSync("db-1605176303649.json", "utf8"));
 
 // puppeteer options
 const opts = {

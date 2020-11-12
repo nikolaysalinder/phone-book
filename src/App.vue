@@ -46,7 +46,9 @@
         </el-menu>
       </el-header>
       <el-main>
-        <router-view />
+        <transition name="route" mode="out-in">
+          <router-view />
+        </transition>
       </el-main>
     </el-container>
   </div>
@@ -88,5 +90,45 @@ button.logout__btn {
 .nav__link {
   display: block;
   padding: 0 20px;
+}
+.route-enter-from {
+}
+.route-enter-active {
+  animation: slide-from-bottom 0.5s ease-out;
+}
+.route-enter-to {
+}
+.route-leave-active {
+  animation: slide-to-top 0.5s ease-in;
+}
+@keyframes slide-to-top {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateY(-50px);
+  }
+
+  100% {
+    transform: translateY(-150px) scale(1);
+    opacity: 0;
+  }
+}
+@keyframes slide-from-bottom {
+  0% {
+    transform: translateY(150px);
+    opacity: 0;
+  }
+
+  50% {
+    transform: translateY(50px);
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 </style>
