@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Login from "./views/Login.vue";
+import Home from "./views/Index.vue";
 import Contacts from "./views/Contacts.vue";
 import NewUser from "./views/NewUser.vue";
 import Registration from "./views/Registration.vue";
@@ -9,9 +10,15 @@ import store from "@/store";
 Vue.use(Router);
 
 const router = new Router({
+  mode: "history",
   routes: [
     {
       path: "/",
+      name: "home",
+      component: Home,
+    },
+    {
+      path: "/login",
       name: "login",
       component: Login,
     },
@@ -47,18 +54,18 @@ const router = new Router({
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth) {
-    if (store.user) {
-      next({
-        name: "login",
-      });
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.requiresAuth) {
+//     if (store.user) {
+//       next({
+//         name: "login",
+//       });
+//     } else {
+//       next();
+//     }
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

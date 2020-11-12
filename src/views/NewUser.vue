@@ -1,22 +1,24 @@
 <template>
   <el-form :label-position="labelPosition" label-width="100px">
-    <el-form-item label="Аватар">
-      <el-input v-model="form.avatar"></el-input>
+    <el-form-item label="Аватар Url">
+      <el-input id="imgUrl" required v-model="form.imgUrl"></el-input>
     </el-form-item>
     <el-form-item label="Фамилия">
-      <el-input v-model="form.lastName"></el-input>
+      <el-input id="lastName" v-model="form.lastName"></el-input>
     </el-form-item>
     <el-form-item label="Имя">
-      <el-input v-model="form.firstName"></el-input>
+      <el-input id="firstName" v-model="form.firstName"></el-input>
     </el-form-item>
-    <el-form-item label="Отчество">
-      <el-input v-model="form.middleName"></el-input>
+    <el-form-item label="Email">
+      <el-input id="email" v-model="form.email"></el-input>
     </el-form-item>
     <el-form-item label="Телефон">
-      <el-input v-model="form.phone"></el-input>
+      <el-input id="phone" v-model="form.phone"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm()">Добавить</el-button>
+      <el-button id="buttonSubmit" type="primary" @click="submitForm()"
+        >Добавить</el-button
+      >
     </el-form-item>
   </el-form>
 </template>
@@ -27,28 +29,30 @@ export default {
     return {
       labelPosition: "top",
       form: {
-        avatar: "",
+        imgUrl: "",
         lastName: "",
         firstName: "",
-        middleName: "",
+        email: "",
+        phone: "",
       },
     };
   },
   methods: {
     submitForm() {
       this.$store.dispatch("storeUser", {
-        avatar: this.form.avatar,
+        avatar: this.form.imgUrl,
         lastName: this.form.lastName,
         firstName: this.form.firstName,
-        middleName: this.form.middleName,
+        email: this.form.email,
         phone: this.form.phone,
       });
+      this.form.imgUrl = "";
+      this.form.lastName = "";
+      this.form.firstName = "";
+      this.form.email = "";
+      this.form.phone = "";
     },
   },
-  computed: {
-    email() {
-      return this.$store.state.userId;
-    },
-  },
+  computed: {},
 };
 </script>

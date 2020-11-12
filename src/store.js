@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    idToken: null,
+    idToken: localStorage.getItem("idToken") || null,
     userId: null,
     users: null,
   },
@@ -37,17 +37,22 @@ export default new Vuex.Store({
         )
         .then((response) => {
           console.log(response);
+
+          localStorage.setItem("idToken", response.data.idToken);
+
           commit("authUser", {
             idToken: response.data.idToken,
             userId: response.data.localId,
           });
           dispatch("storeUser", authData);
+          router.push("/");
         })
         .catch((error) => console.log(error));
     },
     logout({ commit }) {
       commit("clearAuthData");
-      router.push("/");
+      delete localStorage["idToken"];
+      router.push("/login");
     },
     login({ commit }, authData) {
       axios
@@ -61,11 +66,14 @@ export default new Vuex.Store({
         )
         .then((response) => {
           console.log(response);
+
+          localStorage.setItem("idToken", response.data.idToken);
+
           commit("authUser", {
             idToken: response.data.idToken,
             userId: response.data.localId,
           });
-          router.push("/contacts");
+          router.push("/");
         })
         .catch((error) => console.log(error));
     },
@@ -83,7 +91,7 @@ export default new Vuex.Store({
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     },
-    fetchUser({ commit, state }) {
+    fetchUsers({ commit, state }) {
       if (!state.idToken) {
         return;
       }
@@ -94,16 +102,17 @@ export default new Vuex.Store({
             state.idToken
         )
         .then((res) => {
-          console.log("---------", res.data);
-          // const data = res.data;
-          const users = res.data;
-          // for (let key in data) {
-          //   const user = data[key];
-          //   user.id = key;
-          //   users.push(user);
-          //   console.log(users);
+          console.log("--------->", res.data);
+          console.log(res);
+          const data = res.data;
+          const users = [];
+          for (let key in data) {
+            const user = data[key];
+            user.id = key;
+            users.push(user);
+          }
+          console.log("<-------", users);
           commit("storeUsers", users);
-          // }
         });
     },
   },

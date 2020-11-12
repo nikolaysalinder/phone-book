@@ -24,7 +24,7 @@
           },
         ]"
       >
-        <el-input v-model="ruleForm.email"></el-input>
+        <el-input id="email" v-model="ruleForm.email"></el-input>
       </el-form-item>
 
       <el-form-item
@@ -39,6 +39,7 @@
         ]"
       >
         <el-input
+          id="pass"
           type="password"
           v-model="ruleForm.pass"
           autocomplete="off"
@@ -46,7 +47,11 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')"
+        <el-button
+          id="loginButton"
+          type="primary"
+          @click="submitForm('ruleForm')"
+          @keyup.enter.native="checkEnter"
           >Submit</el-button
         >
         <el-button @click="resetForm('ruleForm')">Reset</el-button>
@@ -96,15 +101,23 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.ruleForm.email, this.ruleForm.pass);
-          this.$store.dispatch("login", {
-            email: this.ruleForm.email,
-            password: this.ruleForm.pass,
-          });
+          this.$store
+            .dispatch("login", {
+              email: this.ruleForm.email,
+              password: this.ruleForm.pass,
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+    checkEnter(e) {
+      console.log(e);
+      console.log("check enter");
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

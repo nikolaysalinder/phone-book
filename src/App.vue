@@ -8,20 +8,39 @@
           mode="horizontal"
           @select="handleSelect"
         >
-          <el-menu-item v-if="!auth" index="1">
-            <router-link to="/">Login</router-link>
+          <el-menu-item index="1">
+            <router-link id="logoLink" class="nav__link" to="/">
+              <img
+                height="40px"
+                width="40px"
+                src="phone.svg"
+                alt=""
+                class="logo"
+              />
+            </router-link>
           </el-menu-item>
-          <el-menu-item v-if="!auth" index="2">
-            <router-link to="/registration">Registration</router-link>
+          <el-menu-item class="nav__el" v-if="!auth" index="2">
+            <router-link class="nav__link" to="/login">Login</router-link>
           </el-menu-item>
-          <el-menu-item v-if="auth" index="3">
-            <router-link to="/contacts">Contacts</router-link>
+          <el-menu-item class="nav__el" v-if="!auth" index="3">
+            <router-link class="nav__link" to="/registration"
+              >Registration</router-link
+            >
           </el-menu-item>
-          <el-menu-item v-if="auth" index="4">
-            <router-link to="/newuser">New User</router-link>
+          <el-menu-item class="nav__el" v-if="auth" index="4">
+            <router-link class="nav__link" to="/contacts">Contacts</router-link>
+          </el-menu-item>
+          <el-menu-item class="nav__el" v-if="auth" index="5">
+            <router-link id="newUser" class="nav__link" to="/newuser"
+              >New User</router-link
+            >
           </el-menu-item>
 
-          <el-button v-if="auth" type="primary" @click="logout()"
+          <el-button
+            class="logout__btn"
+            v-if="auth"
+            type="primary"
+            @click="logout()"
             >Logout</el-button
           >
         </el-menu>
@@ -58,4 +77,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+button.logout__btn {
+  margin-top: 10px;
+}
+.el-menu-item.nav__el {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.nav__link {
+  display: block;
+  padding: 0 20px;
+}
+</style>
