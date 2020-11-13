@@ -11,9 +11,13 @@
           <div class="table__head">Телефон</div>
         </li>
         <li class="table__row">
-          <el-button class="table__add-user" type="primary"
-            >Добавить контакт</el-button
+          <el-button
+            @click="enableModal"
+            class="table__add-user"
+            type="primary"
           >
+            Добавить контакт
+          </el-button>
         </li>
         <transition-group name="user-list">
           <li class="table__row" v-for="user in users" :key="user.id">
@@ -46,22 +50,17 @@
           </li>
         </transition-group>
       </ul>
-      <!--  <div>
-        <div class="users__lastname">{{ user.lastName }}</div>
-        <div class="users__firstname">{{ user.firstName }}</div>
-        <div class="users__middlename">{{ user.middleName }}</div>
-        <div class="users__phone">{{ user.phone }}</div>
-        <div class="users__actioins">
-          <el-button type="primary" icon="el-icon-edit" circle></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle></el-button>
-        </div>
-      </div> -->
     </div>
+    <ModalUser v-if="showModal" @close="showModal = false" />
   </div>
 </template>
 
 <script>
+import ModalUser from "../components/ModalUser.vue";
 export default {
+  components: {
+    ModalUser,
+  },
   data() {
     return {
       newUser: {
@@ -71,11 +70,15 @@ export default {
         email: "",
         phone: "",
       },
+      showModal: true,
     };
   },
   methods: {
     removeUser(user) {
       this.$store.commit("deleteUser", user);
+    },
+    enableModal() {
+      this.showModal = true;
     },
   },
   computed: {
