@@ -6,7 +6,6 @@
           :default-active="activeIndex"
           class="el-menu-demo"
           mode="horizontal"
-          @select="handleSelect"
         >
           <el-menu-item index="1">
             <router-link id="logoLink" class="nav__link" to="/">
@@ -62,10 +61,6 @@ export default {
     };
   },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-      this.activeIndex = key;
-    },
     logout() {
       this.$store.dispatch("logout");
       this.$router.push("/");
@@ -82,6 +77,7 @@ export default {
 <style lang="scss">
 button.logout__btn {
   margin-top: 10px;
+  margin-left: 50px;
 }
 .el-menu-item.nav__el {
   padding-left: 0px;

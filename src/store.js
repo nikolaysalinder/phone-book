@@ -137,5 +137,8 @@ export default new Vuex.Store({
     isAuthenticated(state) {
       return state.idToken !== null;
     },
+    filterUserByLastname(state, getters, lastName) {
+      return getters.users.find((user) => user.lastName == lastName);
+    },
   },
 });

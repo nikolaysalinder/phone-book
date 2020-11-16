@@ -13,11 +13,6 @@
         label="Email"
         :rules="[
           {
-            required: true,
-            message: 'Пожалуйста введите email',
-            trigger: 'blur',
-          },
-          {
             type: 'email',
             message: 'Пожалуйста введите верный email',
             trigger: ['blur', 'change'],

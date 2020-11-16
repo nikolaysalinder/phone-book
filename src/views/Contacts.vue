@@ -10,6 +10,36 @@
           <div class="table__head">E-mail</div>
           <div class="table__head">Телефон</div>
         </li>
+        <li class="table__row table__row--search">
+          <el-input
+            class="search__lastname"
+            size="small"
+            placeholder="Фамилия"
+            v-model="search.lastName"
+          >
+          </el-input>
+          <el-input
+            class="search__firstname"
+            size="small"
+            placeholder="Имя"
+            v-model="search.firstName"
+          >
+          </el-input>
+          <el-input
+            class="search__email"
+            size="small"
+            placeholder="email"
+            v-model="search.email"
+          >
+          </el-input>
+          <!-- <el-input
+            class="search__phone"
+            size="small"
+            placeholder="Телефон"
+            v-model="search.phone"
+          >
+          </el-input> -->
+        </li>
         <li class="table__row">
           <el-button
             @click="enableModal"
@@ -51,7 +81,7 @@
         </transition-group>
       </ul>
     </div>
-    <ModalUser v-if="showModal" @close="showModal = false" />
+    <ModalUser v-if="showModal" @close="showModal = false" props="user" />
   </div>
 </template>
 
@@ -63,6 +93,10 @@ export default {
   },
   data() {
     return {
+      search: {
+        lastName: "",
+        firstName: "",
+      },
       newUser: {
         imgUrl: "",
         lastName: "",
@@ -70,7 +104,7 @@ export default {
         email: "",
         phone: "",
       },
-      showModal: true,
+      showModal: false,
     };
   },
   methods: {
@@ -83,7 +117,72 @@ export default {
   },
   computed: {
     users() {
-      return this.$store.getters.users;
+      let users = this.$store.getters.users;
+      if (this.search.lastName && this.search.firstName && this.search.email) {
+        return users
+          .filter((user) => {
+            return (
+              user.lastName
+                .toLowerCase()
+                .indexOf(this.search.lastName.toLowerCase()) > -1
+            );
+          })
+          .filter((user) => {
+            return (
+              user.firstName
+                .toLowerCase()
+                .indexOf(this.search.firstName.toLowerCase()) > -1
+            );
+          })
+          .filter((user) => {
+            return (
+              user.email
+                .toLowerCase()
+                .indexOf(this.search.email.toLowerCase()) > -1
+            );
+          });
+      } else if (this.search.lastName && this.search.firstName) {
+        return users
+          .filter((user) => {
+            return (
+              user.lastName
+                .toLowerCase()
+                .indexOf(this.search.lastName.toLowerCase()) > -1
+            );
+          })
+          .filter((user) => {
+            return (
+              user.firstName
+                .toLowerCase()
+                .indexOf(this.search.firstName.toLowerCase()) > -1
+            );
+          });
+      } else if (this.search.lastName) {
+        return users.filter((user) => {
+          return (
+            user.lastName
+              .toLowerCase()
+              .indexOf(this.search.lastName.toLowerCase()) > -1
+          );
+        });
+      } else if (this.search.firstName) {
+        return users.filter((user) => {
+          return (
+            user.firstName
+              .toLowerCase()
+              .indexOf(this.search.firstName.toLowerCase()) > -1
+          );
+        });
+      } else if (this.search.email) {
+        return users.filter((user) => {
+          return (
+            user.email.toLowerCase().indexOf(this.search.email.toLowerCase()) >
+            -1
+          );
+        });
+      } else {
+        return users;
+      }
     },
   },
   created() {
@@ -131,12 +230,16 @@ export default {
   }
   &__row {
     display: flex;
+    box-sizing: border-box;
     width: 100%;
     &:nth-child(2n) {
       background: #f1f1f1;
     }
     &--new-user {
       padding-left: 120px;
+    }
+    &--search {
+      padding-left: 276px;
     }
   }
   &__add-user {
@@ -187,6 +290,21 @@ export default {
     }
   }
 }
+.search {
+  &__lastname {
+    width: 128px;
+  }
+  &__firstname {
+    width: 135px;
+  }
+  &__email {
+    width: 195px;
+  }
+  &__phone {
+    width: 195px;
+  }
+}
+
 .new-user {
   &__input {
     padding-top: 4px;

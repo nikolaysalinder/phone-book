@@ -51,7 +51,6 @@
           id="loginButton"
           type="primary"
           @click="submitForm('ruleForm')"
-          @keyup.enter.native="checkEnter"
           >Submit</el-button
         >
         <el-button @click="resetForm('ruleForm')">Reset</el-button>
@@ -100,7 +99,6 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.ruleForm.email, this.ruleForm.pass);
           this.$store
             .dispatch("login", {
               email: this.ruleForm.email,
@@ -114,10 +112,6 @@ export default {
           return false;
         }
       });
-    },
-    checkEnter(e) {
-      console.log(e);
-      console.log("check enter");
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
