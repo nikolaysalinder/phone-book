@@ -9,6 +9,7 @@
   >
     <el-form-item label="Аватар URL" prop="imgUrl">
       <el-input
+        id="imgUrl"
         type="text"
         v-model="ruleForm.imgUrl"
         autocomplete="off"
@@ -16,13 +17,14 @@
     </el-form-item>
     <el-form-item label="Фамилия" prop="lastName">
       <el-input
+        id="lastName"
         type="text"
         v-model="ruleForm.lastName"
         autocomplete="off"
       ></el-input>
     </el-form-item>
     <el-form-item label="Имя" prop="firstName">
-      <el-input v-model="ruleForm.firstName"></el-input>
+      <el-input id="firstName" v-model="ruleForm.firstName"></el-input>
     </el-form-item>
     <el-form-item label="Email">
       <el-input id="email" v-model="ruleForm.email"></el-input>
@@ -31,7 +33,10 @@
       <el-input id="phone" v-model="ruleForm.phone"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')"
+      <el-button
+        id="buttonSubmit"
+        type="primary"
+        @click="submitForm('ruleForm')"
         >Submit</el-button
       >
       <el-button @click="resetForm('ruleForm')">Reset</el-button>
@@ -72,7 +77,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$store.dispatch("storeUser", {
-            avatar: this.ruleForm.imgUrl,
+            imgUrl: this.ruleForm.imgUrl,
             lastName: this.ruleForm.lastName,
             firstName: this.ruleForm.firstName,
             email: this.ruleForm.email,

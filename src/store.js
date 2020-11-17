@@ -10,11 +10,15 @@ export default new Vuex.Store({
     idToken: localStorage.getItem("idToken") || null,
     userId: null,
     users: null,
+    editedUser: null,
   },
   mutations: {
     authUser(state, userData) {
       state.idToken = userData.idToken;
       state.userId = userData.userId;
+    },
+    storeEditUser(state, user) {
+      state.editedUser = user;
     },
     storeUsers(state, users) {
       state.users = users;
@@ -23,18 +27,36 @@ export default new Vuex.Store({
       state.idToken = null;
       state.userId = null;
     },
+    updateUser(state, user) {
+      axios
+        .patch(
+          "https://phone-book-ca240.firebaseio.com/users/" +
+            user.id +
+            ".json" +
+            "?auth=" +
+            state.idToken,
+          user
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
+    },
     deleteUser(state, user) {
-      const index = state.users.findIndex((usr) => usr.id === user.id);
-      state.users.splice(index, 1);
       axios
         .delete(
           "https://phone-book-ca240.firebaseio.com/users/" +
             user.id +
             ".json" +
             "?auth=" +
-            state.idToken
+            state.idToken,
+          user
         )
-        .then((res) => console.log(res))
+        .then((res) => {
+          console.log(res);
+          const index = state.users.findIndex((usr) => usr.id === user.id);
+          state.users.splice(index, 1);
+        })
         .catch((err) => console.log(err));
     },
   },
@@ -59,7 +81,7 @@ export default new Vuex.Store({
             userId: response.data.localId,
           });
           // dispatch("storeUser", authData);
-          router.push("/");
+          router.push("/contacts");
         })
         .catch((error) => console.log(error));
     },
@@ -87,7 +109,7 @@ export default new Vuex.Store({
             idToken: response.data.idToken,
             userId: response.data.localId,
           });
-          router.push("/");
+          router.push("/contacts");
         })
         .catch((error) => console.log(error));
     },
@@ -131,14 +153,14 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    users: (state) => {
+    users(state) {
       return state.users;
+    },
+    getEditedUser(state) {
+      return state.editedUser;
     },
     isAuthenticated(state) {
       return state.idToken !== null;
-    },
-    filterUserByLastname(state, getters, lastName) {
-      return getters.users.find((user) => user.lastName == lastName);
     },
   },
 });

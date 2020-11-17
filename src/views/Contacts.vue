@@ -55,8 +55,8 @@
             <div class="table__cell">
               <img
                 :src="
-                  user.avatar
-                    ? user.avatar
+                  user.imgUrl
+                    ? user.imgUrl
                     : 'https://www.flaticon.com/svg/static/icons/svg/1077/1077114.svg'
                 "
                 class="users__image"
@@ -69,7 +69,12 @@
             <div class="table__cell">{{ user.email }}</div>
             <div class="table__cell">{{ user.phone }}</div>
             <div class="table__cell">
-              <el-button type="primary" icon="el-icon-edit" circle></el-button>
+              <el-button
+                @click="editUser(user)"
+                type="primary"
+                icon="el-icon-edit"
+                circle
+              ></el-button>
               <el-button
                 @click="removeUser(user)"
                 type="danger"
@@ -82,20 +87,28 @@
       </ul>
     </div>
     <ModalUser v-if="showModal" @close="showModal = false" props="user" />
+    <ModalEditUser
+      v-if="showEditModal"
+      @close="showEditModal = false"
+      :editedUser="editedUser"
+    />
   </div>
 </template>
 
 <script>
 import ModalUser from "../components/ModalUser.vue";
+import ModalEditUser from "../components/ModalEditUser.vue";
 export default {
   components: {
     ModalUser,
+    ModalEditUser,
   },
   data() {
     return {
       search: {
         lastName: "",
         firstName: "",
+        email: "",
       },
       newUser: {
         imgUrl: "",
@@ -104,7 +117,9 @@ export default {
         email: "",
         phone: "",
       },
+      editedUser: {},
       showModal: false,
+      showEditModal: false,
     };
   },
   methods: {
@@ -113,6 +128,12 @@ export default {
     },
     enableModal() {
       this.showModal = true;
+    },
+    editUser(user) {
+      this.editedUser = user;
+      this.$store.commit("storeEditUser", user);
+      this.showEditModal = true;
+      console.log(this.editedUser);
     },
   },
   computed: {

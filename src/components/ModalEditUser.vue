@@ -15,25 +15,25 @@
             <el-form-item label="Аватар URL" prop="imgUrl">
               <el-input
                 type="text"
-                v-model="ruleForm.imgUrl"
+                v-model="editedUser.imgUrl"
                 autocomplete="off"
               ></el-input>
             </el-form-item>
             <el-form-item label="Фамилия" prop="lastName">
               <el-input
                 type="text"
-                v-model="ruleForm.lastName"
+                v-model="editedUser.lastName"
                 autocomplete="off"
               ></el-input>
             </el-form-item>
             <el-form-item label="Имя" prop="firstName">
-              <el-input v-model="ruleForm.firstName"></el-input>
+              <el-input v-model="editedUser.firstName"></el-input>
             </el-form-item>
             <el-form-item label="Email">
-              <el-input id="email" v-model="ruleForm.email"></el-input>
+              <el-input id="email" v-model="editedUser.email"></el-input>
             </el-form-item>
             <el-form-item label="Телефон">
-              <el-input id="phone" v-model="ruleForm.phone"></el-input>
+              <el-input id="phone" v-model="editedUser.phone"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')"
@@ -53,18 +53,18 @@
 <script>
 export default {
   data() {
-    const isImgUrl = (imgUrl) => {
-      return /(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(imgUrl);
-    };
-    var validateImgUrl = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("Введите url картинки"));
-      } else if (!isImgUrl(value)) {
-        callback(new Error("Введите картинку формате .jpg, .png, .gif"));
-      } else {
-        callback();
-      }
-    };
+    // const isImgUrl = (imgUrl) => {
+    //   return /(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(imgUrl);
+    // };
+    // var validateImgUrl = (rule, value, callback) => {
+    //   if (value === "") {
+    //     callback(new Error("Введите url картинки"));
+    //   } else if (!isImgUrl(value)) {
+    //     callback(new Error("Введите картинку формате .jpg, .png, .gif"));
+    //   } else {
+    //     callback();
+    //   }
+    // };
     return {
       ruleForm: {
         imgUrl: "",
@@ -74,31 +74,33 @@ export default {
         phone: "",
       },
       rules: {
-        imgUrl: [{ validator: validateImgUrl, trigger: "blur" }],
+        // imgUrl: [{ validator: validateImgUrl, trigger: "blur" }],
       },
     };
+  },
+  computed: {
+    editedUser() {
+      return this.$store.getters.getEditedUser;
+    },
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.dispatch("storeUser", {
-            imgUrl: this.ruleForm.imgUrl,
-            lastName: this.ruleForm.lastName,
-            firstName: this.ruleForm.firstName,
-            email: this.ruleForm.email,
-            phone: this.ruleForm.phone,
+          this.$store.commit("updateUser", {
+            imgUrl: this.editedUser.imgUrl,
+            id: this.editedUser.id,
+            lastName: this.editedUser.lastName,
+            firstName: this.editedUser.firstName,
+            email: this.editedUser.email,
+            phone: this.editedUser.phone,
           });
-          this.ruleForm.imgUrl = "";
-          this.ruleForm.lastName = "";
-          this.ruleForm.firstName = "";
-          this.ruleForm.email = "";
-          this.ruleForm.phone = "";
+
           this.$emit("close");
 
-          setTimeout(() => {
-            this.$router.go();
-          }, 1000);
+          // setTimeout(() => {
+          //   this.$router.go();
+          // }, 1000);
         } else {
           console.log("error submit!!");
           return false;
