@@ -29,17 +29,17 @@
             <el-form-item label="Имя" prop="firstName">
               <el-input v-model="ruleForm.firstName"></el-input>
             </el-form-item>
-            <el-form-item label="Email">
+            <el-form-item label="Email" prop="email">
               <el-input id="email" v-model="ruleForm.email"></el-input>
             </el-form-item>
-            <el-form-item label="Телефон">
+            <el-form-item label="Телефон" prop="phone">
               <el-input id="phone" v-model="ruleForm.phone"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')"
-                >Submit</el-button
+                >Отправить</el-button
               >
-              <el-button @click="resetForm('ruleForm')">Reset</el-button>
+              <el-button @click="resetForm('ruleForm')">Сбросить</el-button>
             </el-form-item>
             <a class="modal__button-close" @click.prevent="$emit('close')"
               >Закрыть</a

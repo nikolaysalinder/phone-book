@@ -71,16 +71,16 @@ export default new Vuex.Store({
             returnSecureToken: true,
           }
         )
-        .then((response) => {
-          console.log(response);
+        .then((res) => {
+          console.log(res);
 
-          localStorage.setItem("idToken", response.data.idToken);
+          localStorage.setItem("idToken", res.data.idToken);
 
           commit("authUser", {
-            idToken: response.data.idToken,
-            userId: response.data.localId,
+            idToken: res.data.idToken,
+            userId: res.data.localId,
           });
-          // dispatch("storeUser", authData);
+
           router.push("/contacts");
         })
         .catch((error) => console.log(error));
@@ -101,8 +101,6 @@ export default new Vuex.Store({
           }
         )
         .then((response) => {
-          console.log(response);
-
           localStorage.setItem("idToken", response.data.idToken);
 
           commit("authUser", {

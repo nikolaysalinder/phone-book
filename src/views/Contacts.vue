@@ -68,7 +68,7 @@
             <div class="table__cell">{{ user.firstName }}</div>
             <div class="table__cell">{{ user.email }}</div>
             <div class="table__cell">{{ user.phone }}</div>
-            <div class="table__cell">
+            <div class="table__cell table__cell--buttons">
               <el-button
                 @click="editUser(user)"
                 type="primary"
@@ -273,8 +273,9 @@ export default {
     padding: 10px;
 
     box-sizing: border-box;
-    height: 60px;
-    line-height: 40px;
+    &--buttons {
+      height: 60px;
+    }
     &:first-child {
       width: 200px;
       font-size: 14px;

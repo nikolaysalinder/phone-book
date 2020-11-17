@@ -2,11 +2,7 @@
   <div id="app">
     <el-container>
       <el-header>
-        <el-menu
-          :default-active="activeIndex"
-          class="el-menu-demo"
-          mode="horizontal"
-        >
+        <el-menu class="el-menu-demo" mode="horizontal">
           <el-menu-item index="1">
             <router-link id="logoLink" class="nav__link" to="/">
               <img
@@ -19,20 +15,15 @@
             </router-link>
           </el-menu-item>
           <el-menu-item class="nav__el" v-if="!auth" index="2">
-            <router-link class="nav__link" to="/login">Login</router-link>
+            <router-link class="nav__link" to="/login">Вход</router-link>
           </el-menu-item>
           <el-menu-item class="nav__el" v-if="!auth" index="3">
             <router-link class="nav__link" to="/registration"
-              >Registration</router-link
+              >Регистрация</router-link
             >
           </el-menu-item>
           <el-menu-item class="nav__el" v-if="auth" index="4">
-            <router-link class="nav__link" to="/contacts">Contacts</router-link>
-          </el-menu-item>
-          <el-menu-item class="nav__el" v-if="auth" index="5">
-            <router-link id="newUser" class="nav__link" to="/newuser"
-              >New User</router-link
-            >
+            <router-link class="nav__link" to="/contacts">Контакты</router-link>
           </el-menu-item>
 
           <el-button
@@ -40,7 +31,7 @@
             v-if="auth"
             type="primary"
             @click="logout()"
-            >Logout</el-button
+            >Выйти</el-button
           >
         </el-menu>
       </el-header>

@@ -37,9 +37,8 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')"
-                >Submit</el-button
+                >Отправить</el-button
               >
-              <el-button @click="resetForm('ruleForm')">Reset</el-button>
             </el-form-item>
             <a class="modal__button-close" @click.prevent="$emit('close')"
               >Закрыть</a
@@ -106,9 +105,6 @@ export default {
           return false;
         }
       });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
     },
   },
 };
