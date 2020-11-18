@@ -13,36 +13,44 @@ export default new Vuex.Store({
     editedUser: null,
   },
   mutations: {
-    authUser(state, userData) {
+    AUTH_USER(state, userData) {
       state.idToken = userData.idToken;
       state.userId = userData.userId;
     },
-    storeEditUser(state, user) {
+    STORE_EDITED_USER(state, user) {
       state.editedUser = user;
     },
-    storeUsers(state, users) {
+    STORE_USERS(state, users) {
       state.users = users;
     },
-    clearAuthData(state) {
+    CLEAR_AUTH_DATA(state) {
       state.idToken = null;
       state.userId = null;
     },
-    updateUser(state, user) {
+    DELETE_USER(state, user) {
+      const index = state.users.findIndex((usr) => usr.id === user.id);
+      state.users.splice(index, 1);
+    },
+  },
+  actions: {
+    updateUser({ state }, user) {
+      const userId = user.id;
+      delete user.id;
       axios
         .patch(
           "https://phone-book-ca240.firebaseio.com/users/" +
-            user.id +
+            userId +
             ".json" +
             "?auth=" +
             state.idToken,
           user
         )
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
         })
         .catch((err) => console.log(err));
     },
-    deleteUser(state, user) {
+    deleteUser({ commit, state }, user) {
       axios
         .delete(
           "https://phone-book-ca240.firebaseio.com/users/" +
@@ -53,14 +61,13 @@ export default new Vuex.Store({
           user
         )
         .then((res) => {
-          console.log(res);
-          const index = state.users.findIndex((usr) => usr.id === user.id);
-          state.users.splice(index, 1);
+          console.log(res.data);
+          if (!res.data) {
+            commit("DELETE_USER", user);
+          }
         })
         .catch((err) => console.log(err));
     },
-  },
-  actions: {
     signup({ commit }, authData) {
       axios
         .post(
@@ -76,7 +83,7 @@ export default new Vuex.Store({
 
           localStorage.setItem("idToken", res.data.idToken);
 
-          commit("authUser", {
+          commit("AUTH_USER", {
             idToken: res.data.idToken,
             userId: res.data.localId,
           });
@@ -86,7 +93,7 @@ export default new Vuex.Store({
         .catch((error) => console.log(error));
     },
     logout({ commit }) {
-      commit("clearAuthData");
+      commit("CLEAR_AUTH_DATA");
       delete localStorage["idToken"];
       router.push("/login");
     },
@@ -103,7 +110,7 @@ export default new Vuex.Store({
         .then((response) => {
           localStorage.setItem("idToken", response.data.idToken);
 
-          commit("authUser", {
+          commit("AUTH_USER", {
             idToken: response.data.idToken,
             userId: response.data.localId,
           });
@@ -146,7 +153,7 @@ export default new Vuex.Store({
             users.push(user);
           }
           console.log("<-------", users);
-          commit("storeUsers", users);
+          commit("STORE_USERS", users);
         });
     },
   },

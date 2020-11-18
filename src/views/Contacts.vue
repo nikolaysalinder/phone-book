@@ -32,13 +32,6 @@
             v-model="search.email"
           >
           </el-input>
-          <!-- <el-input
-            class="search__phone"
-            size="small"
-            placeholder="Телефон"
-            v-model="search.phone"
-          >
-          </el-input> -->
         </li>
         <li class="table__row">
           <el-button
@@ -87,11 +80,7 @@
       </ul>
     </div>
     <ModalUser v-if="showModal" @close="showModal = false" props="user" />
-    <ModalEditUser
-      v-if="showEditModal"
-      @close="showEditModal = false"
-      :editedUser="editedUser"
-    />
+    <ModalEditUser v-if="showEditModal" @close="showEditModal = false" />
   </div>
 </template>
 
@@ -117,23 +106,22 @@ export default {
         email: "",
         phone: "",
       },
-      editedUser: {},
+      // editedUser: {},
       showModal: false,
       showEditModal: false,
     };
   },
   methods: {
     removeUser(user) {
-      this.$store.commit("deleteUser", user);
+      this.$store.dispatch("deleteUser", user);
     },
     enableModal() {
       this.showModal = true;
     },
     editUser(user) {
-      this.editedUser = user;
-      this.$store.commit("storeEditUser", user);
+      // this.editedUser = user;
+      this.$store.commit("STORE_EDITED_USER", user);
       this.showEditModal = true;
-      console.log(this.editedUser);
     },
   },
   computed: {

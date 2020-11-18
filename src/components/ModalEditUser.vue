@@ -86,7 +86,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.commit("updateUser", {
+          this.$store.dispatch("updateUser", {
             imgUrl: this.editedUser.imgUrl,
             id: this.editedUser.id,
             lastName: this.editedUser.lastName,
@@ -96,10 +96,6 @@ export default {
           });
 
           this.$emit("close");
-
-          // setTimeout(() => {
-          //   this.$router.go();
-          // }, 1000);
         } else {
           console.log("error submit!!");
           return false;
